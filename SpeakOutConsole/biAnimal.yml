@@ -1,0 +1,40 @@
+animal1:
+- cat
+- dog
+- chick
+- horse
+- bird
+
+animal2:
+- bear
+- duck
+- elephant
+- peacock
+- rabbit
+- ape
+- turtle
+- deer
+- tiger
+- donkey
+- monkey
+- fish
+
+all animal:
+- cat
+- dog
+- chick
+- horse
+- bird
+
+- bear
+- duck
+- elephant
+- peacock
+- rabbit
+- ape
+- turtle
+- deer
+- tiger
+- donkey
+- monkey
+- fish

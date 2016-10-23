@@ -46,9 +46,7 @@ namespace SampleSynthesis
             //SpeechSynthesizer synth = new SpeechSynthesizer();
             //synth.SelectVoice("Microsoft Lili");
 
-            string sampleText = ConfigurationManager.AppSettings["sampleText"];
-            string outputWaveFileName = ConfigurationManager.AppSettings["outputWaveFileName"];
-            string inputFileName = ConfigurationManager.AppSettings["inputFileName"];
+
             //Console.WriteLine("{0},{1}", enginaName, readText);
 
             //synth.SelectVoice(voiceEngineName);
@@ -65,21 +63,26 @@ namespace SampleSynthesis
             //Console.WriteLine(node);
 
             Speaker sp = new Speaker();
+            string sampleText = ConfigurationManager.AppSettings["sampleText"];
+            string outputWaveFileName = ConfigurationManager.AppSettings["outputWaveFileName"];
+            string inputFileName = ConfigurationManager.AppSettings["inputFileName"];
+            //sp.speakToWaveFile(sampleText, outputWaveFileName);
 
             System.String[] readTexts = File.ReadAllLines(inputFileName);
             //去掉重复的字符串
             readTexts = (from item in readTexts
                          select item).Distinct().ToArray();
-                      
+
             foreach (String read_text in readTexts)
             {
+                //在yml文件中，课程文件只有一级，需要发音的都是以-开头，示例文件：biAnimal.yml
                 if (read_text.StartsWith("-"))
                 {
-                    string fileName = (read_text.Substring(2)+".wav").ToLower();
+                    string fileName = (read_text.Substring(2) + ".wav").ToLower();
                     //写文件的时候使用小写，以在linux上更好的使用。
                     if (File.Exists(fileName))
                     {
-                        Console.WriteLine("file already exit:{0}", fileName);
+                        Console.WriteLine("!!! file already exit:{0} !!!", fileName);
                     }
                     else
                     {
@@ -90,7 +93,7 @@ namespace SampleSynthesis
                 }
             }
 
-            Console.WriteLine();
+            //Console.WriteLine();
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
         }

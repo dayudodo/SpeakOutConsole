@@ -75,6 +75,7 @@ namespace SampleSynthesis
             //如果没有命令行，就读取yml文件来生成，如果有参数，那么就生成需要朗读的句子们
             if (args.Length == 0)
             {
+                Console.WriteLine("开始朗读{0}文件...", inputFileName);
                 foreach (String read_text in readTexts)
                 {
                     //在yml文件中，课程文件只有一级，需要发音的都是以-开头，示例文件：biAnimal.yml
@@ -83,22 +84,25 @@ namespace SampleSynthesis
                         string phrase = read_text.Substring(2);
                         string fileName = (read_text.Substring(2) + ".wav").ToLower();
                         
-                        wavToFile(phrase, fileName);
+                        mp3ToFile(phrase, fileName);
+                        File.Delete(fileName);
                     }
                 }
             }
+            //如果有参数，就朗读这些参数
             else
             {
                 foreach (var item in args)
                 {
                     string fileName = (item + ".wav").ToLower();
-                    wavToFile(item, fileName);
+                    mp3ToFile(item, fileName);
+                    File.Delete(fileName);
                 }
             }
 
 
             //Console.WriteLine();
-            Console.WriteLine("Press any key to exit...");
+            Console.WriteLine("All done!");
             Console.ReadKey();
         }
         static void wavToFile(string phrase, string filename)
@@ -115,6 +119,39 @@ namespace SampleSynthesis
                 //Console.WriteLine(fileName);
                 Console.WriteLine("{0} TTS spoke. ", filename);
             }
+        }
+        static void mp3ToFile(string phrase, string filename)
+        {
+            wavToFile(phrase, filename);
+            //使用ffmpeg转换成mp3
+
+
+            string mp3Name = filename.Substring(0, filename.Length - 3) + "mp3";
+            string command = string.Format("/C ffmpeg -i \"{0}\" \"{1}\"", filename, mp3Name);
+
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            startInfo.FileName = "cmd.exe";
+            startInfo.Arguments = command;
+            process.StartInfo = startInfo;
+            process.Start();
+
+
+
+            //完成后删除wav文件，只需要mp3!
+            //if (File.Exists(filename))
+            //{
+            //    File.Delete(filename);
+            //}
+            //else
+            //{
+            //    Console.WriteLine("文件不存在:{0}", filename);
+            //}
+
+            process.WaitForExit();
+            process.Close();
+
         }
     }
 }

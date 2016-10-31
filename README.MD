@@ -1,5 +1,13 @@
 # 语音朗读器使用说明：
 
+## 命令行模式
+运行
+```
+SpeakOutConsole.exe man woman boy "a real sentence"
+```
+即可在当前目录下生成四个wav文件
+
+## 默认模式
 修改app.config中的inputFileName, 修改为需要读取的yml文件即可
 ```xml
 <?xml version="1.0" encoding="utf-8"?>

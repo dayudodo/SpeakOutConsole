@@ -85,25 +85,25 @@ namespace SampleSynthesis
                         string fileName = (read_text.Substring(2) + ".wav").ToLower();
                         
                         mp3ToFile(phrase, fileName);
-                        File.Delete(fileName);
+                        //File.Delete(fileName);
                     }
                 }
             }
             //如果有参数，就朗读这些参数
             else
             {
-                foreach (var item in args)
+                foreach (string item in args)
                 {
-                    string fileName = (item + ".wav").ToLower();
+                    //文件名中不能有问号
+                    string fileName = (item.Replace("?", "") + ".wav").ToLower();
+                    Console.WriteLine(fileName);
                     mp3ToFile(item, fileName);
-                    File.Delete(fileName);
+                    //File.Delete(fileName);
                 }
             }
-
-
             //Console.WriteLine();
             Console.WriteLine("All done!");
-            Console.ReadKey();
+            //Console.ReadKey();
         }
         static void wavToFile(string phrase, string filename)
         {
@@ -127,18 +127,29 @@ namespace SampleSynthesis
 
 
             string mp3Name = filename.Substring(0, filename.Length - 3) + "mp3";
-            string command = string.Format("/C ffmpeg -i \"{0}\" \"{1}\"", filename, mp3Name);
+            // c表示在命令执行完毕后关闭cmd窗口
+            string command = "/c" + string.Format("ffmpeg -i \"{0}\" \"{1}\"", filename, mp3Name);
 
             System.Diagnostics.Process process = new System.Diagnostics.Process();
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            startInfo.UseShellExecute = false; //關閉Shell的使用
+            startInfo.RedirectStandardInput = true;   //重定向標準輸入
+            startInfo.RedirectStandardOutput = true;  //重定向標準輸出
+            startInfo.RedirectStandardError = true;   //重定向錯誤輸出
+            startInfo.CreateNoWindow = true;          //設置不顯示窗口
+
+            //startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal ;
             startInfo.FileName = "cmd.exe";
             startInfo.Arguments = command;
             process.StartInfo = startInfo;
             process.Start();
-
-
-
+            process.StandardInput.WriteLine(command);
+            string output = process.StandardOutput.ReadToEnd();
+            process.StandardInput.WriteLine("exit");
+            
+            process.WaitForExit();
+            process.Close();
+            Console.WriteLine(output);
             //完成后删除wav文件，只需要mp3!
             //if (File.Exists(filename))
             //{
@@ -148,10 +159,6 @@ namespace SampleSynthesis
             //{
             //    Console.WriteLine("文件不存在:{0}", filename);
             //}
-
-            process.WaitForExit();
-            process.Close();
-
         }
     }
 }

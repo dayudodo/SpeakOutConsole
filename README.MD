@@ -1,16 +1,14 @@
 # 语音朗读器使用说明：
-使用了ffmpeg来进行文件的压缩处理，请先安装ffmpeg并加入相应的path
+主功能：朗读文本成为声音文件。
+必备软件：
+- TTS引擎，比如INOVA, neo speech等
+- 使用了ffmpeg来进行声音文件的转换处理，请先安装[ffmpeg](http://ffmpeg.org)
 
-
-## 命令行模式
-运行
+## 无参数模式
 ```
-SpeakOutConsole.exe man woman boy "a real sentence"
+speak
 ```
-即可在当前目录下生成四个wav文件
-
-## 默认模式
-修改app.config中的inputFileName, 修改为需要读取的yml文件即可
+会自动读取配置中的inputFileName项，app.config配置文件如下：
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
@@ -26,7 +24,7 @@ SpeakOutConsole.exe man woman boy "a real sentence"
   </appSettings>
 </configuration>
 ```
-yml文件格式这样写：
+biAnimal.yaml文件格式如下：
 ```yaml
   running:
   - a man is running
@@ -37,3 +35,16 @@ yml文件格式这样写：
   - a boy is running on water
   - people are running after a dog
 ```
+如此，朗读为a man is running.mp3及she is running...的声音文件
+
+## 指定yaml模式
+```
+speak -yml abc.yml
+```
+会自动朗读abc.yml，第一个参数必须为-yml
+
+## 读单词模式
+```
+speak.exe man woman "a real sentence"
+```
+即可在当前目录下生成这几个mp3文件，分别为man.mp3, woman.mp3，a real sentence.mp3

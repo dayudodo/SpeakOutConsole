@@ -65,28 +65,26 @@ namespace SampleSynthesis
             //string sampleText = ConfigurationManager.AppSettings["sampleText"];
             //string outputWaveFileName = ConfigurationManager.AppSettings["outputWaveFileName"];
 
-            string inputFileName = ConfigurationManager.AppSettings["inputFileName"];
-            //sp.speakToWaveFile(sampleText, outputWaveFileName);
 
-            System.String[] readTexts = File.ReadAllLines(inputFileName);
-            //去掉重复的字符串
-            readTexts = (from item in readTexts
-                         select item).Distinct().ToArray();
             //如果没有命令行，就读取yml文件来生成，如果有参数，那么就生成需要朗读的句子们
+            
             if (args.Length == 0)
             {
-                Console.WriteLine("开始朗读{0}文件...", inputFileName);
-                foreach (String read_text in readTexts)
+                string inputFileName = ConfigurationManager.AppSettings["inputFileName"];
+                //sp.speakToWaveFile(sampleText, outputWaveFileName);
+                speakFromFile(inputFileName);
+
+
+            }
+            else if(args[0] == "-yml" )
+            {
+                if (args.Length == 1)
                 {
-                    //在yml文件中，课程文件只有一级，需要发音的都是以-开头，示例文件：biAnimal.yml
-                    if (read_text.StartsWith("-"))
-                    {
-                        string phrase = read_text.Substring(2);
-                        string fileName = (read_text.Substring(2) + ".wav").ToLower();
-                        
-                        mp3ToFile(phrase, fileName);
-                        //File.Delete(fileName);
-                    }
+                    Console.WriteLine("必须指定一个yml文件名称！");
+                }
+                else
+                {
+                    speakFromFile(args[1]);
                 }
             }
             //如果有参数，就朗读这些参数
@@ -159,6 +157,37 @@ namespace SampleSynthesis
             //{
             //    Console.WriteLine("文件不存在:{0}", filename);
             //}
+        }
+        /// <summary>
+        /// 从yaml文件中读取需朗读信息，并保存到声音文件
+        /// </summary>
+        /// <param name="inputFileName">需要朗读的yaml文件</param>
+        static void speakFromFile(string inputFileName)
+        {
+            if (File.Exists(inputFileName))
+            {
+                string[] readTexts = File.ReadAllLines(inputFileName);
+                //去掉重复的字符串
+                readTexts = (from item in readTexts
+                             select item).Distinct().ToArray();
+                Console.WriteLine("开始朗读{0}文件...", inputFileName);
+                foreach (String read_text in readTexts)
+                {
+                    //在yml文件中，课程文件只有一级，需要发音的都是以-开头，示例文件：biAnimal.yml
+                    if (read_text.StartsWith("-"))
+                    {
+                        string phrase = read_text.Substring(2);
+                        string fileName = (read_text.Substring(2) + ".wav").ToLower();
+
+                        mp3ToFile(phrase, fileName);
+                        //File.Delete(fileName);
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine(inputFileName + "文件不存在，请使用-yml作为第一个参数，后跟yml文件名称");
+            }
         }
     }
 }

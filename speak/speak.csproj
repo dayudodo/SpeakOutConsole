@@ -7,8 +7,8 @@
     <ProjectGuid>{1B3BE0BD-2D11-4E2F-A847-DFAAE2195563}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SpeakOutConsole</RootNamespace>
-    <AssemblyName>SpeakOutConsole</AssemblyName>
+    <RootNamespace>speak</RootNamespace>
+    <AssemblyName>speak</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -52,14 +52,8 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Speech" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Yaml">
-      <HintPath>..\..\..\..\..\ange_english_study\yamlParsert\Code\Yaml.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -68,7 +62,6 @@
   <ItemGroup>
     <None Include="app.config">
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="biAnimal.yml" />
   </ItemGroup>
